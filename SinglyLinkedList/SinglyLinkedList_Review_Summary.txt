@@ -1,0 +1,256 @@
+================================================================================
+                SINGLY LINKED LIST PROBLEMS REVIEW SUMMARY
+        Workspace: DsaPractice/SinglyLinkedList (Questions 24 to 42)
+================================================================================
+
+SUMMARY STATISTICS:
+- Total SLL Problems:    19 (Questions 24 to 42)
+- Reviewed Problems:     13 (Unique algorithmic patterns & canonical archetypes)
+- Not Reviewed Problems:  6 (Skipped due to redundancy, pure subsets, or triviality)
+- Review Efficiency:     ~32% redundant code eliminated with 100% conceptual coverage
+
+================================================================================
+SECTION 1: REVIEWED PROBLEMS (UNIQUE ALGORITHMIC PATTERNS)
+================================================================================
+
+[1] SLLOperations.c (Question 24)
+    Status: REVIEWED (Unique Core ADT)
+    Category: Fundamental ADT Operations & Double Pointer Semantics
+    Problem Statement:
+      Implement a Singly Linked List ADT supporting insertion at beginning and 
+      end, deletion from beginning and end, and full list traversal.
+    Key Algorithmic Concepts:
+      - Uses double pointers (struct Node** head) to mutate the caller's head 
+        pointer without requiring global state.
+      - Contrasts O(1) head insertion/deletion with O(N) tail traversal.
+      - Enforces robust dynamic memory management (malloc & free).
+
+--------------------------------------------------------------------------------
+
+[2] InsertAtPosition.c (Question 25)
+    Status: REVIEWED (Unique Positional Insertion)
+    Category: 1-Based Indexing & Predecessor Splicing
+    Problem Statement:
+      Insert a node at an arbitrary 1-based index position with full boundary 
+      checking.
+    Key Algorithmic Concepts:
+      - Distinguishes head insertion (pos == 1) from intermediate/tail insertion.
+      - Traverses to predecessor node at (pos - 1).
+      - Catches invalid out-of-bounds positions (pos < 1 or pos > length + 1).
+      - Safely splices: newNode->next = curr->next; curr->next = newNode.
+
+--------------------------------------------------------------------------------
+
+[3] DeleteAtPosition.c (Question 26)
+    Status: REVIEWED (Unique Positional Deletion)
+    Category: 1-Based Indexing & Node Deallocation
+    Problem Statement:
+      Delete a node at a specified 1-based index position, safely freeing its 
+      memory and maintaining link integrity.
+    Key Algorithmic Concepts:
+      - Explicit state validation: empty list, single element list, head node, 
+        intermediate node, tail node, and out-of-bounds indices.
+      - Uses temporary pointer capture (toDelete = curr->next) to update links 
+        before freeing heap memory.
+
+--------------------------------------------------------------------------------
+
+[4] ReverseSinglyLinkedList.c (Question 29)
+    Status: REVIEWED (Unique Canonical Algorithm)
+    Category: In-Place Iterative Pointer Reversal
+    Problem Statement:
+      Reverse a singly linked list in-place in O(N) time and O(1) auxiliary space.
+    Key Algorithmic Concepts:
+      - Three-pointer sliding window: prev (NULL), curr (head), and next (NULL).
+      - Pointer inversion sequence:
+          next = curr->next;
+          curr->next = prev;
+          prev = curr;
+          curr = next;
+      - Finally updates *head = prev.
+      - Canonical building block for complex list transformations.
+
+--------------------------------------------------------------------------------
+
+[5] MiddleNode.c (Question 30)
+    Status: REVIEWED (Unique Two-Pointer Technique)
+    Category: Fast & Slow Pointer (Tortoise and Hare)
+    Problem Statement:
+      Find the middle node of a singly linked list in a single traversal.
+    Key Algorithmic Concepts:
+      - Slow pointer advances 1 step (slow = slow->next).
+      - Fast pointer advances 2 steps (fast = fast->next->next).
+      - When fast hits the end, slow is precisely at the midpoint.
+      - Handles odd vs even node count conventions (first vs second middle).
+
+--------------------------------------------------------------------------------
+
+[6] KthFromEnd.c (Question 31)
+    Status: REVIEWED (Unique Two-Pointer Technique)
+    Category: Fixed Offset / Delay Window Technique
+    Problem Statement:
+      Find the k-th node from the end of a singly linked list in a single pass.
+    Key Algorithmic Concepts:
+      - Uses two pointers (ref_ptr and main_ptr) separated by a fixed gap of k.
+      - ref_ptr is first advanced k steps from the head.
+      - If list length < k, returns an error immediately.
+      - Both pointers advance together; when ref_ptr hits NULL, main_ptr points 
+        to the k-th node from the end.
+      - Avoids two-pass length computation.
+
+--------------------------------------------------------------------------------
+
+[7] RemoveDuplicates.c (Question 32)
+    Status: REVIEWED (Unique In-Place Deduplication)
+    Category: Runner Pointer Technique (Unsorted List)
+    Problem Statement:
+      Remove duplicate values from an unsorted singly linked list without extra space.
+    Key Algorithmic Concepts:
+      - Employs a nested two-pointer "runner" traversal: for every node curr, 
+        an inner runner pointer scans curr->next to NULL.
+      - If runner->data == curr->data, unlinks the node and frees memory immediately.
+      - Runs in O(N^2) time and O(1) space, avoiding hash set dependencies.
+
+--------------------------------------------------------------------------------
+
+[8] StudentRecordManagement.c (Question 35)
+    Status: REVIEWED (Representative Real-World Application)
+    Category: Composite Struct & Custom Key Search/Deletion
+    Problem Statement:
+      Implement a student record management database storing roll numbers, names, 
+      and marks with CRUD operations.
+    Key Algorithmic Concepts:
+      - Demonstrates linked lists managing composite, heterogeneous structs 
+        (integers, strings, floats).
+      - Implements safe string handling (strncpy), key-based search, and 
+        targeted node deletion by primary key (rollNo).
+
+--------------------------------------------------------------------------------
+
+[9] PolynomialAddition.c (Question 37)
+    Status: REVIEWED (Unique Algebraic Linked List)
+    Category: Ordered Multi-Field Representation & Two-List Arithmetic Merge
+    Problem Statement:
+      Represent polynomials as linked lists in descending order of exponents and 
+      compute their algebraic sum.
+    Key Algorithmic Concepts:
+      - Node structure: int coeff, int exp, struct PolyNode* next.
+      - Combines terms with matching exponents and discards zero-coefficient results.
+      - Merges remaining trailing terms from whichever polynomial is longer.
+      - Fully subsumes PolynomialRepresentation.c (Question 36).
+
+--------------------------------------------------------------------------------
+
+[10] SortedInsertSLL.c (Question 38)
+     Status: REVIEWED (Unique Ordered Invariant)
+     Category: Ordered Invariant Maintenance
+     Problem Statement:
+       Insert a new element into an already-sorted linked list preserving order.
+     Key Algorithmic Concepts:
+       - Special case: empty list or insertion before the head (val <= head->data).
+       - General case: advances until curr->next == NULL || curr->next->data >= val.
+       - Splices the node without requiring full re-sorting (O(N) time, O(1) space).
+
+--------------------------------------------------------------------------------
+
+[11] SplitList.c (Question 39)
+     Status: REVIEWED (Unique Destructive Partitioning)
+     Category: Midpoint Bisection & Link Termination
+     Problem Statement:
+       Split a linked list into two balanced sublists using slow and fast pointers.
+     Key Algorithmic Concepts:
+       - Uses fast pointer initialized at source->next and slow at source.
+       - When fast reaches end, slow sits at the end of the first half.
+       - Performs link termination: slow->next = NULL, producing two clean lists.
+       - Essential partition step for Linked List Merge Sort.
+
+--------------------------------------------------------------------------------
+
+[12] CycleDetection.c (Question 40)
+     Status: REVIEWED (Unique Algorithmic & Mathematical Benchmark)
+     Category: Floyd's Cycle Finding Algorithm (Detection & Entry Node)
+     Problem Statement:
+       Detect if a cycle exists in a singly linked list, and if so, determine 
+       the exact node where the cycle begins.
+     Key Algorithmic Concepts:
+       - Phase 1: fast moves 2 steps, slow moves 1 step. Meeting confirms a cycle.
+       - Phase 2: reset ptr1 to head, keep ptr2 at meeting point. Advance both 
+         at 1 step per cycle. They meet at the cycle entry node.
+       - Mathematical derivation: L1 = nC - k.
+
+--------------------------------------------------------------------------------
+
+[13] MergeSortedLists.c (Question 41)
+     Status: REVIEWED (Unique Two-List Splicing)
+     Category: In-Place Two-Way Sorted Merge (Dummy Head Pattern)
+     Problem Statement:
+       Merge two sorted singly linked lists into a single sorted list in-place.
+     Key Algorithmic Concepts:
+       - Uses a stack-allocated dummy head node to eliminate special first-node code.
+       - Compares heads of both lists and advances the tail pointer.
+       - Splices remaining nodes with a single pointer assignment in O(1).
+       - Zero dynamic memory allocations.
+
+--------------------------------------------------------------------------------
+
+[14] DeleteByValue.c (Question 42)
+     Status: REVIEWED (Unique Multi-Node Purging)
+     Category: Global Multi-Occurrence Deletion
+     Problem Statement:
+       Delete all occurrences of a specified target value across head, middle, 
+       and tail positions.
+     Key Algorithmic Concepts:
+       - Leading occurrences handled via while (*head != NULL && (*head)->data == target).
+       - Internal and trailing occurrences handled via lookahead (curr->next->data == target).
+       - Successfully handles consecutive target matches and full-list purges.
+
+================================================================================
+SECTION 2: NOT REVIEWED (SKIPPED) PROBLEMS
+================================================================================
+
+[15] SearchElement.c (Question 27)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Trivial linear traversal checking curr->data == target.
+       - Traversal and search logic is identical to routines already reviewed in 
+         SLLOperations.c, StudentRecordManagement.c, and DeleteByValue.c.
+
+--------------------------------------------------------------------------------
+
+[16] CountSumAverage.c (Question 28)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Trivial accumulator loop (count++, sum += data).
+       - Traversal pattern is identical to standard display() with zero new pointer 
+         manipulation mechanics.
+
+--------------------------------------------------------------------------------
+
+[17] ConcatenateLists.c (Question 33)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Simply traverses list1 until curr->next == NULL and assigns curr->next = head2.
+       - Functionally identical to insertAtEnd() with no new pointer algorithms.
+
+--------------------------------------------------------------------------------
+
+[18] MusicPlaylistSLL.c (Question 34)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Functionally and architecturally identical to StudentRecordManagement.c (Question 35).
+       - Both implement composite structs (strings + numbers), end insertion, 
+         deletion by key, search, and traversal.
+       - Reviewing StudentRecordManagement.c fully covers this application pattern.
+
+--------------------------------------------------------------------------------
+
+[19] PolynomialRepresentation.c (Question 36)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Strict structural subset of PolynomialAddition.c (Question 37).
+       - Q37 implements the complete polynomial representation and sorted insertion 
+         logic from Q36, and additionally implements the polynomial addition algorithm.
+
+================================================================================
+                               END OF SUMMARY
+================================================================================

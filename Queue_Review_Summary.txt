@@ -1,0 +1,188 @@
+================================================================================
+                      QUEUE PROBLEMS REVIEW SUMMARY
+             Workspace: DsaPractice/Queue (Questions 12 to 23)
+================================================================================
+
+SUMMARY STATISTICS:
+- Total Queue Problems: 12
+- Reviewed Problems:    10 (6 In-depth walkthroughs + 4 Unique algorithmic reviews)
+- Not Reviewed Problems: 2 (Skipped due to redundancy / triviality)
+
+================================================================================
+SECTION 1: REVIEWED PROBLEMS
+================================================================================
+
+[1] QueueUsingArray.c (Question 12)
+    Status: REVIEWED (Full In-depth Walkthrough)
+    Category: Fundamental ADT Implementation
+    Problem Statement:
+      Implement a fixed-capacity Linear Queue ADT using a static array with 
+      FIFO (First-In, First-Out) operations: enqueue, dequeue, getFront, 
+      isEmpty, isFull, and display.
+    Algorithm & Working:
+      - Uses front and rear index pointers initialized to -1.
+      - Enqueue increments rear and stores the value; dequeue increments front.
+      - Resets both front and rear to -1 when front > rear (queue becomes empty).
+    Limitation:
+      - False overflow: once rear reaches MAX - 1, no further enqueues are 
+        allowed even if early elements have been dequeued.
+
+--------------------------------------------------------------------------------
+
+[2] CircularQueueArray.c (Question 13)
+    Status: REVIEWED (Full In-depth Walkthrough)
+    Category: Fundamental ADT Implementation
+    Problem Statement:
+      Implement a Circular Queue using an array to eliminate memory wastage and 
+      false overflow seen in linear queues.
+    Algorithm & Working:
+      - Pointers advance via modulo arithmetic: index = (index + 1) % MAX.
+      - Full condition: ((rear + 1) % MAX == front).
+      - Empty condition: (front == -1).
+      - Reclaims empty slots at the front of the array after dequeuing.
+
+--------------------------------------------------------------------------------
+
+[3] QueueUsingLL.c (Question 14)
+    Status: REVIEWED (Full In-depth Walkthrough)
+    Category: Dynamic Data Structure
+    Problem Statement:
+      Implement a dynamically-sized Queue using a singly linked list with 
+      dedicated front (head) and rear (tail) pointers.
+    Algorithm & Working:
+      - Dynamic heap allocation: elements are allocated on demand with malloc().
+      - Enqueue appends at the rear pointer in O(1) time.
+      - Dequeue extracts from the front pointer, frees node memory in O(1) time,
+        and sets rear = NULL if the queue becomes empty.
+      - Never suffers from fixed-capacity overflow (bounded only by heap memory).
+
+--------------------------------------------------------------------------------
+
+[4] QueueUsingTwoStacks.c (Question 15)
+    Status: REVIEWED (Full In-depth Walkthrough)
+    Category: Classic Data Structure Transformation
+    Problem Statement:
+      Implement a FIFO Queue using only two LIFO Stacks (s1 and s2).
+    Algorithm & Working:
+      - Enqueue pushes directly to s1 in O(1) time.
+      - Dequeue uses lazy transfer: if s2 is empty, it pops all elements from 
+        s1 and pushes them to s2 (reversing order into FIFO), then pops s2.
+      - Amortized Time Complexity: O(1) per dequeue operation because each 
+        element is pushed/popped at most twice across its lifecycle.
+
+--------------------------------------------------------------------------------
+
+[5] DequeArray.c (Question 16)
+    Status: REVIEWED (Full In-depth Walkthrough)
+    Category: Double-Ended Queue ADT
+    Problem Statement:
+      Implement a Double-Ended Queue (Deque) using a circular array allowing 
+      insertions and deletions at both the front and rear.
+    Algorithm & Working:
+      - Supports insertFront, insertRear, deleteFront, deleteRear in O(1).
+      - Bidirectional circular wraparound:
+        * Forward wrap: index = (index + 1) % MAX
+        * Backward wrap: index 0 wraps back to MAX - 1
+      - Unifies stack (LIFO) and queue (FIFO) functionality in a single structure.
+
+--------------------------------------------------------------------------------
+
+[6] PrinterQueue.c (Question 17)
+    Status: REVIEWED (Full In-depth Walkthrough)
+    Category: Real-world Simulation
+    Problem Statement:
+      Simulate an operating system / network printer spooler that manages print 
+      jobs arriving asynchronously and processes them in FIFO order.
+    Algorithm & Working:
+      - Stores composite records (PrintJob: jobId, docName, pages).
+      - addJob spools new jobs to the rear with safe strncpy handling.
+      - processJob serves the earliest waiting job at the front.
+      - Resets pointers when all spooled jobs have completed.
+
+--------------------------------------------------------------------------------
+
+[7] RoundRobinScheduling.c (Question 19)
+    Status: REVIEWED (Unique Algorithmic Problem)
+    Category: CPU Scheduling / Operating System Algorithms
+    Problem Statement:
+      Simulate CPU Round-Robin process scheduling with a fixed time quantum.
+    Algorithm & Working:
+      - Uses a circular queue containing process indices.
+      - In each cycle, dequeues a process and runs it for min(quantum, remaining).
+      - If remaining burst time > 0, the process is PREEMPTED and re-enqueued 
+        to the rear of the ready queue.
+      - If remaining burst time == 0, the process terminates and records 
+        its completion time.
+
+--------------------------------------------------------------------------------
+
+[8] FirstNonRepeatingChar.c (Question 21)
+    Status: REVIEWED (Unique Algorithmic Problem)
+    Category: Streaming Data / Frequency Map + Queue
+    Problem Statement:
+      Find the first non-repeating character in a continuous stream of characters.
+    Algorithm & Working:
+      - Combines a character queue with an ASCII frequency count array freq[256].
+      - For each incoming char: increment freq[ch] and enqueue(ch).
+      - Eager Pruning: while (!isEmpty() && freq[peekFront()] > 1), dequeue().
+      - Front element is guaranteed to be the earliest non-repeating character; 
+        if queue is empty, all seen characters are duplicates (-1 / None).
+
+--------------------------------------------------------------------------------
+
+[9] InterleaveQueue.c (Question 22)
+    Status: REVIEWED (Unique Algorithmic Problem)
+    Category: In-place Queue Rearrangement
+    Problem Statement:
+      Given an even-length queue [a1, a2, ..., ak, b1, b2, ..., bk], rearrange 
+      it in-place to [a1, b1, a2, b2, ..., ak, bk] using only ONE auxiliary stack.
+    Algorithm & Working:
+      - Step 1: Dequeue first half into stack.
+      - Step 2: Empty stack back into queue (first half placed at rear, reversed).
+      - Step 3: Rotate second half to rear (dequeue & enqueue k times).
+      - Step 4: Dequeue first half into stack again (restores original order).
+      - Step 5: Interleave alternately: pop one from stack, dequeue one from queue.
+
+--------------------------------------------------------------------------------
+
+[10] JosephusProblem.c (Question 23)
+     Status: REVIEWED (Unique Algorithmic Problem)
+     Category: Circle Elimination Simulation
+     Problem Statement:
+       N people stand in a circle (1 to N). Every k-th person is eliminated until 
+       only one person remains. Determine the elimination sequence and survivor.
+     Algorithm & Working:
+       - Enqueue people 1 to N into a circular queue.
+       - While size > 1:
+         * Skip (k - 1) people by cycling them: enqueue(dequeue()).
+         * Eliminate the k-th person: dequeue().
+       - The sole remaining person in the queue is the survivor.
+
+================================================================================
+SECTION 2: NOT REVIEWED (SKIPPED) PROBLEMS
+================================================================================
+
+[11] TicketCounter.c (Question 18)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Functionally identical to PrinterQueue.c.
+       - Merely simulates customers waiting in line with a Customer struct 
+         (tokenNo, name, ticketCount) in a standard FIFO array queue.
+       - No new algorithmic patterns or data structure mechanics beyond 
+         what was already covered in PrinterQueue.c.
+
+--------------------------------------------------------------------------------
+
+[12] QueueReversal.c (Question 20)
+     Status: NOT REVIEWED (Skipped)
+     Reason for Skipping:
+       - Conceptually trivial implementation.
+       - Reversal is achieved by dequeuing every element from the queue onto 
+         an auxiliary stack, and then popping every element from the stack 
+         back into the queue.
+       - Because stacks are LIFO, this standard two-pass loop reverses the queue 
+         order in O(N) time with O(N) space without requiring deeper analysis.
+
+================================================================================
+                              END OF SUMMARY
+================================================================================
